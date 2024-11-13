@@ -56,9 +56,7 @@ class _MyHomePageState extends State<MyHomePage>
 
     animation = Tween<double>(begin: 0.0, end: 0.9).animate(controller)
       ..addListener(() {
-        setState(() {
-          // Vous pouvez ajouter du code ici si nécessaire pour mettre à jour l'état
-        });
+        setState(() {});
       });
     startimer();
     controller.forward();
@@ -66,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void dispose() {
-    controller.dispose(); // Disposez de l'AnimationController
+    controller.dispose();
     super.dispose();
   }
 
@@ -75,22 +73,17 @@ class _MyHomePageState extends State<MyHomePage>
     return Scaffold(
       body: Stack(
         children: [
-          background(
-              'images/111.jpeg'), // Assurez-vous que le widget 'Background' existe
-          colorsbackground(), // Assurez-vous que le widget 'ColorsBackground' existe
-
+          
+          colorsbackground(),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Center(
                 child: Column(
                   children: <Widget>[
-  const SizedBox(height: 155),
-  transition("", controller),
- 
-  
-],
-
+                    const SizedBox(height: 155),
+                    transition("", controller),
+                  ],
                 ),
               ),
             ),

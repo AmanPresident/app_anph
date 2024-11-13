@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'background.dart';
-import 'register.dart'; // Assurez-vous d'importer votre fichier register.dart
-import 'database_helper.dart'; // Importez DatabaseHelper
+import 'register.dart'; 
+import 'database_helper.dart'; 
 import 'EcranTrois.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
@@ -88,34 +87,62 @@ class _EcranDeuxState extends State<EcranDeux>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        backgroundColor: Colors.blue, // Changement ici
-        title: Row(
-          children: [
-            Icon(Icons.account_circle,
-                color: Colors.white), // Logo décalé à gauche
-            SizedBox(width: 10), // Espace entre le logo et le titre
-            Text(
-              "Connexion",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight + 7),
+        child: Column( children: [
+          
+          Container(
+            decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 1, 48, 87),
+                Color.fromARGB(255, 81, 175, 230),
+                Color.fromARGB(255, 1, 48, 87),
+              ],
             ),
-          ],
+          ),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+            elevation: 4,
+            centerTitle: false,
+            title: Row(
+              children: [
+                Icon(Icons.account_circle, color: Colors.white),
+                SizedBox(width: 20),
+                Text(
+                  "CONNEXION",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          ),
+          Container(
+              height: 7.0,
+              color: Colors.green,
+          ),
+          
+        ],
+        
         ),
-      ),
+          
+        ),
+      
       body: Stack(
         fit: StackFit.expand,
         children: [
           
-          colorsbackground(),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView(
                 children: [
-                  SizedBox(height: 50),
+                  
+                  SizedBox(height: 20.0),
                   Container(
                     padding: const EdgeInsets.all(20),
                     margin: const EdgeInsets.symmetric(
@@ -137,6 +164,7 @@ class _EcranDeuxState extends State<EcranDeux>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Icon(Icons.account_circle , size: 200.0, color: Colors.grey,),
                         SlideTransition(
                           position: Tween<Offset>(
                                   begin: Offset(0.0, -0.9), end: Offset.zero)
@@ -144,12 +172,11 @@ class _EcranDeuxState extends State<EcranDeux>
                           child: TextField(
                             controller: _loginController,
                             decoration: InputDecoration(
-                              labelStyle:
-                                  TextStyle(color: Colors.blueGrey),
+                              labelStyle: TextStyle(color: Colors.blueGrey),
                               labelText: 'Login',
                               hintText: "Entrez votre login ou adresse mail",
-                              prefixIcon: Icon(Icons.person,
-                                  color: Colors.blueGrey),
+                              prefixIcon:
+                                  Icon(Icons.person, color: Colors.blueGrey),
                             ),
                             style: TextStyle(color: Colors.black),
                             keyboardType: TextInputType.text,
@@ -163,12 +190,11 @@ class _EcranDeuxState extends State<EcranDeux>
                           child: TextField(
                             controller: _passwordController,
                             decoration: InputDecoration(
-                              labelStyle:
-                                  TextStyle(color: Colors.blueGrey),
+                              labelStyle: TextStyle(color: Colors.blueGrey),
                               labelText: 'Mot de passe',
                               hintText: "Entrez votre mot de passe",
-                              prefixIcon: Icon(Icons.lock,
-                                  color: Colors.blueGrey),
+                              prefixIcon:
+                                  Icon(Icons.lock, color: Colors.blueGrey),
                             ),
                             style: TextStyle(color: Colors.black),
                             keyboardType: TextInputType.text,
@@ -189,22 +215,23 @@ class _EcranDeuxState extends State<EcranDeux>
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.blue.shade200, // Couleur du fond du bouton
+                                primary: Colors
+                                    .blue.shade200, 
                                 onPrimary:
-                                    Colors.white, // Couleur du texte du bouton
+                                    Colors.white, 
                               ),
                               child: Text("REGISTRATION"),
                             ),
                             ElevatedButton(
                               onPressed: _login,
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.blueAccent, // Couleur du fond du bouton
+                                primary: Colors
+                                    .blueAccent, 
                                 onPrimary:
-                                    Colors.white, // Couleur du texte du bouton
+                                    Colors.white, 
                               ),
                               child: Text("CONNEXION"),
                             ),
-                            
                           ],
                         ),
                         SizedBox(height: 20),
@@ -222,9 +249,9 @@ class _EcranDeuxState extends State<EcranDeux>
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors
-                                .green.shade400, // Couleur du fond du bouton
+                                .green.shade400, 
                             onPrimary:
-                                Colors.white, // Couleur du texte du bouton
+                                Colors.white, 
                           ),
                           child: Text("MOBILE ID"),
                         ),
@@ -259,7 +286,7 @@ class _EcranDeuxState extends State<EcranDeux>
             );
           }
         },
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 5, 65, 114),
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
       ),

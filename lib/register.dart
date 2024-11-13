@@ -119,21 +119,50 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue,
-        title: Row(
-          children: [
-            Icon(Icons.person_add, color: Colors.white),
-            SizedBox(width: 10),
-            Text(
-              "Inscription",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight + 7),
+        child: Column( children: [
+          
+          Container(
+            decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 1, 48, 87),
+                Color.fromARGB(255, 81, 175, 230),
+                Color.fromARGB(255, 1, 48, 87),
+              ],
             ),
-          ],
+          ),
+          child: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+            elevation: 4,
+            centerTitle: false,
+            title: Row(
+              children: [
+                Icon(Icons.person_add , color: Colors.white),
+                SizedBox(width: 20),
+                Text(
+                  "INSCRIPTION",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          ),
+          Container(
+              height: 7.0,
+              color: Colors.green,
+          ),
+          
+        ],
+        
         ),
-      ),
+          
+        ),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -168,9 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(height: 10),
-                        
-                        SizedBox(height: 20),
+                       Icon(Icons.person_add , size: 100.0, color: Colors.grey,),
                         TextFormField(
                           controller: _usernameController,
                           decoration: InputDecoration(
@@ -326,7 +353,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
             );
           }
         },
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 5, 65, 114),
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
       ),
