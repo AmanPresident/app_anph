@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'EcranDeux.dart';
+
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'identité et famille/AttestationAccueil.dart';
 import 'identité et famille/Passport.dart';
+import 'identité et famille/Formulaires/FicheConsultation.dart';
 import 'Afficher_document.dart';
 
 class BodyAccueil extends StatefulWidget {
@@ -32,31 +34,31 @@ class _BodyAccueilState extends State<BodyAccueil> {
         filteredItems = allItems;
       } else {
         filteredItems = allItems
-            .where((item) => item['title']
-                .toLowerCase()
-                .contains(query.toLowerCase()))
+            .where((item) =>
+                item['title'].toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
     });
   }
 
   void navigateToItem(String query, BuildContext context) {
-  final foundItems = allItems.where(
-    (item) => item['title'].toLowerCase() == query.toLowerCase(),
-  );
-
-  if (foundItems.isNotEmpty) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => foundItems.first['screen'],
-      ),
+    final foundItems = allItems.where(
+      (item) => item['title'].toLowerCase() == query.toLowerCase(),
     );
-  } else {
-    // Vous pouvez ajouter une action ici si aucun élément n'est trouvé, comme afficher un message d'erreur.
-    print("Aucun élément trouvé");
+
+    if (foundItems.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => foundItems.first['screen'],
+        ),
+      );
+    } else {
+      // Vous pouvez ajouter une action ici si aucun élément n'est trouvé, comme afficher un message d'erreur.
+      print("Aucun élément trouvé");
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -74,9 +76,37 @@ class _BodyAccueilState extends State<BodyAccueil> {
             )),
         SizedBox(height: 16.0),
         Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ExpansionTile(
+              leading: Icon(Icons.security, color: Colors.black87),
+              title: Text(
+                "Privilèges Handicapé",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              children: [
+                ListTile(
+                  title: Text("Reservation Hopital"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EcranDeux()),
+                    );
+                  },
+                ),
+              ],
+            )),
+        SizedBox(height: 16.0),
+        Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.family_restroom, color: Colors.blue),
@@ -104,7 +134,7 @@ class _BodyAccueilState extends State<BodyAccueil> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Passeport()),
+                        builder: (context) => FicheDeConsultation()),
                   );
                 },
               ),
@@ -112,19 +142,14 @@ class _BodyAccueilState extends State<BodyAccueil> {
                 title: Text("Autorisation parentale d'un enfant mineur"),
                 onTap: () {
                   Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DocumentList()),
-              );
+                    context,
+                    MaterialPageRoute(builder: (context) => DocumentList()),
+                  );
                 },
               ),
               ListTile(
                 title: Text("Autorité Parentale"),
-                onTap: () {
-                  Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DocumentList()),
-              );
-                },
+                onTap: () {},
               ),
               ListTile(
                 title: Text("Carte d'Identité Nationale"),
@@ -185,8 +210,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.health_and_safety, color: Colors.green),
@@ -244,8 +269,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.school, color: Colors.purple),
@@ -291,8 +316,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.home, color: Colors.orange),
@@ -334,8 +359,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.directions_car, color: Colors.teal),
@@ -421,8 +446,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.gavel, color: Colors.red),
@@ -490,8 +515,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.attach_money, color: Colors.yellow.shade700),
@@ -556,8 +581,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.public, color: Colors.brown),
@@ -595,8 +620,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.local_activity, color: Colors.indigo),
@@ -618,8 +643,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey.shade200, 
-            borderRadius: BorderRadius.circular(8), 
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: ExpansionTile(
             leading: Icon(Icons.bolt, color: Colors.lightBlue),
@@ -654,9 +679,8 @@ class _BodyAccueilState extends State<BodyAccueil> {
         SizedBox(height: 16.0),
         Container(
             decoration: BoxDecoration(
-              color: Colors.grey.shade200, 
-              borderRadius:
-                  BorderRadius.circular(8), 
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(8),
             ),
             child: ExpansionTile(
               leading: Icon(Icons.security, color: Colors.black87),

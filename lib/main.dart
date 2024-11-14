@@ -73,7 +73,6 @@ class _MyHomePageState extends State<MyHomePage>
     return Scaffold(
       body: Stack(
         children: [
-          
           colorsbackground(),
           SafeArea(
             child: Padding(

@@ -3,7 +3,6 @@ import '../Appbar.dart';
 import '../bottom_navigation_bar.dart';
 
 class AttestationAccueil extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

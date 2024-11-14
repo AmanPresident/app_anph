@@ -7,17 +7,18 @@ class DatabaseHelper {
   static Database? _database;
 
   DatabaseHelper._init();
-  
 
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDB('app_database.db');
     return _database!;
   }
+
   Future<List<Map<String, dynamic>>> getAllDocuments() async {
-  final db = await instance.database;
-  return await db.query('documents');
-}
+    final db = await instance.database;
+    return await db.query('documents');
+  }
+
 // Nouvelle fonction pour récupérer un document par son nom
   Future<List<Map<String, dynamic>>> getDocumentsByName(String fileName) async {
     final db = await instance.database;
@@ -62,7 +63,8 @@ class DatabaseHelper {
   // Fonction pour insérer un document dans la table "documents"
   Future<int> insertDocument(String fileName, String filePath) async {
     final db = await instance.database;
-    final dateAdded = DateTime.now().toIso8601String(); // Date actuelle formatée
+    final dateAdded =
+        DateTime.now().toIso8601String(); // Date actuelle formatée
 
     // Insertion dans la table "documents"
     final result = await db.insert(
@@ -72,7 +74,8 @@ class DatabaseHelper {
         'filePath': filePath,
         'dateAdded': dateAdded,
       },
-      conflictAlgorithm: ConflictAlgorithm.replace, // Remplace si un document existe déjà
+      conflictAlgorithm:
+          ConflictAlgorithm.replace, // Remplace si un document existe déjà
     );
     return result;
   }
@@ -87,7 +90,6 @@ class DatabaseHelper {
     );
     return result.isNotEmpty;
   }
-  
 
   Future<bool> emailExists(String email) async {
     final db = await instance.database;

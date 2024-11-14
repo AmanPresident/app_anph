@@ -7,20 +7,19 @@ class BodyAccueile extends StatefulWidget {
 }
 
 class _BodyAccueileState extends State<BodyAccueile> {
-  
   void filterSearchResults(String query) {
     setState(() {
       if (query.isEmpty) {
         filteredItems = allItems;
       } else {
         filteredItems = allItems
-            .where((item) => item['title']
-                .toLowerCase()
-                .contains(query.toLowerCase()))
+            .where((item) =>
+                item['title'].toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
     });
   }
+
   List<Map<String, dynamic>> allItems = [
     {'title': 'Attestation d\'Accueil', 'screen': AttestationAccueil()},
     {'title': 'Title 2', 'screen': AttestationAccueil()},
@@ -35,7 +34,6 @@ class _BodyAccueileState extends State<BodyAccueile> {
     super.initState();
     filteredItems = allItems;
   }
-  
 
   void navigateToItem(String query, BuildContext context) {
     final foundItems = allItems.where(
@@ -54,11 +52,10 @@ class _BodyAccueileState extends State<BodyAccueile> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Ajoutez votre code de construction de widget ici
-    );
+        // Ajoutez votre code de construction de widget ici
+        );
   }
 }

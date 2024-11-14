@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'register.dart'; 
-import 'database_helper.dart'; 
+import 'register.dart';
+import 'database_helper.dart';
 import 'EcranTrois.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
@@ -89,59 +89,53 @@ class _EcranDeuxState extends State<EcranDeux>
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight + 7),
-        child: Column( children: [
-          
-          Container(
-            decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 1, 48, 87),
-                Color.fromARGB(255, 81, 175, 230),
-                Color.fromARGB(255, 1, 48, 87),
-              ],
-            ),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
-            elevation: 4,
-            centerTitle: false,
-            title: Row(
-              children: [
-                Icon(Icons.account_circle, color: Colors.white),
-                SizedBox(width: 20),
-                Text(
-                  "CONNEXION",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color.fromARGB(255, 1, 48, 87),
+                    Color.fromARGB(255, 81, 175, 230),
+                    Color.fromARGB(255, 1, 48, 87),
+                  ],
                 ),
-              ],
+              ),
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.transparent,
+                elevation: 4,
+                centerTitle: false,
+                title: Row(
+                  children: [
+                    Icon(Icons.account_circle, color: Colors.white),
+                    SizedBox(width: 20),
+                    Text(
+                      "CONNEXION",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          ),
-          Container(
+            Container(
               height: 7.0,
               color: Colors.green,
-          ),
-          
-        ],
-        
+            ),
+          ],
         ),
-          
-        ),
-      
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView(
                 children: [
-                  
                   SizedBox(height: 20.0),
                   Container(
                     padding: const EdgeInsets.all(20),
@@ -164,7 +158,11 @@ class _EcranDeuxState extends State<EcranDeux>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Icon(Icons.account_circle , size: 200.0, color: Colors.grey,),
+                        Icon(
+                          Icons.account_circle,
+                          size: 200.0,
+                          color: Colors.grey,
+                        ),
                         SlideTransition(
                           position: Tween<Offset>(
                                   begin: Offset(0.0, -0.9), end: Offset.zero)
@@ -215,20 +213,16 @@ class _EcranDeuxState extends State<EcranDeux>
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors
-                                    .blue.shade200, 
-                                onPrimary:
-                                    Colors.white, 
+                                primary: Colors.blue.shade200,
+                                onPrimary: Colors.white,
                               ),
                               child: Text("REGISTRATION"),
                             ),
                             ElevatedButton(
                               onPressed: _login,
                               style: ElevatedButton.styleFrom(
-                                primary: Colors
-                                    .blueAccent, 
-                                onPrimary:
-                                    Colors.white, 
+                                primary: Colors.blueAccent,
+                                onPrimary: Colors.white,
                               ),
                               child: Text("CONNEXION"),
                             ),
@@ -248,10 +242,8 @@ class _EcranDeuxState extends State<EcranDeux>
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors
-                                .green.shade400, 
-                            onPrimary:
-                                Colors.white, 
+                            primary: Colors.green.shade400,
+                            onPrimary: Colors.white,
                           ),
                           child: Text("MOBILE ID"),
                         ),

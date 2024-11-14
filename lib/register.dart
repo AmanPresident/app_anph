@@ -121,52 +121,48 @@ class _RegistrationScreenState extends State<RegistrationScreen>
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight + 7),
-        child: Column( children: [
-          
-          Container(
-            decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 1, 48, 87),
-                Color.fromARGB(255, 81, 175, 230),
-                Color.fromARGB(255, 1, 48, 87),
-              ],
-            ),
-          ),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
-            elevation: 4,
-            centerTitle: false,
-            title: Row(
-              children: [
-                Icon(Icons.person_add , color: Colors.white),
-                SizedBox(width: 20),
-                Text(
-                  "INSCRIPTION",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color.fromARGB(255, 1, 48, 87),
+                    Color.fromARGB(255, 81, 175, 230),
+                    Color.fromARGB(255, 1, 48, 87),
+                  ],
                 ),
-              ],
+              ),
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.transparent,
+                elevation: 4,
+                centerTitle: false,
+                title: Row(
+                  children: [
+                    Icon(Icons.person_add, color: Colors.white),
+                    SizedBox(width: 20),
+                    Text(
+                      "INSCRIPTION",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          ),
-          Container(
+            Container(
               height: 7.0,
               color: Colors.green,
-          ),
-          
-        ],
-        
+            ),
+          ],
         ),
-          
-        ),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          
           colorsbackground(),
           SafeArea(
             child: Padding(
@@ -197,13 +193,17 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                       Icon(Icons.person_add , size: 100.0, color: Colors.grey,),
+                        Icon(
+                          Icons.person_add,
+                          size: 100.0,
+                          color: Colors.grey,
+                        ),
                         TextFormField(
                           controller: _usernameController,
                           decoration: InputDecoration(
                             labelText: "Nom d'utilisateur",
-                            prefixIcon: Icon(Icons.person,
-                                color: Colors.blueGrey),
+                            prefixIcon:
+                                Icon(Icons.person, color: Colors.blueGrey),
                             hintText: "Entrez votre nom",
                             labelStyle: TextStyle(color: Colors.blueGrey),
                           ),
@@ -272,38 +272,33 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                           },
                         ),
                         SizedBox(height: 30),
-                        
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EcranDeux()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.blue.shade200,
-                            onPrimary: Colors.white,
-                          ),
-                          child: Text("CONNEXION"),
-                        ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EcranDeux()),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.blue.shade200,
+                                onPrimary: Colors.white,
+                              ),
+                              child: Text("CONNEXION"),
+                            ),
                             ElevatedButton(
-                          onPressed: _registerUser,
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.blueAccent,
-                            onPrimary: Colors.white,
-                          ),
-                          child: Text('S\'INSCRIRE'),
-                        ),
-                        
-                        
+                              onPressed: _registerUser,
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.blueAccent,
+                                onPrimary: Colors.white,
+                              ),
+                              child: Text('S\'INSCRIRE'),
+                            ),
                           ],
                         ),
-                        
-                        
                         Center(
                           child: Text("ou continuer avec "),
                         ),
@@ -322,10 +317,8 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                           ),
                           child: Text("MOBILE ID"),
                         ),
-                          ],
-                        ),
-                        
-                      
+                      ],
+                    ),
                   ),
                 ),
               ),
