@@ -1,6 +1,7 @@
+import 'package:aman_iad_app/identit%C3%A9%20et%20famille/Formulaires/ReservationHopitale.dart';
 import 'package:flutter/material.dart';
 import 'EcranDeux.dart';
-
+import 'identité et famille/Formulaires/ReservationHopitale.dart';
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'identité et famille/AttestationAccueil.dart';
 import 'identité et famille/Passport.dart';
@@ -96,7 +97,7 @@ class _BodyAccueilState extends State<BodyAccueil> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => EcranDeux()),
+                      MaterialPageRoute(builder: (context) => ReservationHopitale()),
                     );
                   },
                 ),

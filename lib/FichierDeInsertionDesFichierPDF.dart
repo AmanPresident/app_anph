@@ -18,7 +18,9 @@ class Insertion extends StatefulWidget {
       String fileName = result.files.single.name;
 
       await DatabaseHelper.instance.insertDocument(fileName, filePath);
-      print("Document inséré avec succès: $fileName");
+       SnackBar(
+                        content: Text(
+                            "Veuillez sélectionner un type de passeport avant de continuer."));
     } else {
       print("Aucun fichier sélectionné.");
     }

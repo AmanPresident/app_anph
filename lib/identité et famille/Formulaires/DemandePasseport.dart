@@ -1,7 +1,12 @@
 import 'package:aman_iad_app/EcranTrois.dart';
+import 'package:aman_iad_app/FichierDeInsertionDesFichierPDF.dart';
+import 'package:aman_iad_app/background.dart';
 import 'package:flutter/material.dart';
 import '../../Appbar.dart';
 import '../../bottom_navigation_bar.dart';
+import 'package:open_file/open_file.dart';
+import '../../database_helper.dart';
+import 'package:file_picker/file_picker.dart';
 
 class DemandeDePasseport extends StatefulWidget {
   @override
@@ -9,6 +14,42 @@ class DemandeDePasseport extends StatefulWidget {
 }
 
 class _DemandeDePasseportState extends State<DemandeDePasseport> {
+  static Future<void> insertPdfDocument() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null) {
+      String filePath = result.files.single.path!;
+      String fileName = result.files.single.name;
+
+      await DatabaseHelper.instance.insertDocument(fileName, filePath);
+      SnackBar(
+          content: Text(
+              "Veuillez sélectionner un type de passeport avant de continuer."));
+    } else {
+      print("Aucun fichier sélectionné.");
+    }
+  }
+
+  Future<String?> _getDocumentPath() async {
+    final documents =
+        await DatabaseHelper.instance.getDocumentsByName('certificat.pdf');
+    if (documents.isNotEmpty) {
+      return documents[0]['filePath'];
+    } else {
+      return null; // Aucun document trouvé
+    }
+  }
+
+  void _openDocument() async {
+    final filePath = await _getDocumentPath();
+    if (filePath != null) {
+      OpenFile.open(filePath); // Utilise OpenFile pour ouvrir le PDF
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   int _currentStep = 0;
   final TextEditingController _pereController = TextEditingController();
@@ -26,6 +67,35 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
   final TextEditingController _tailleController = TextEditingController();
   final TextEditingController _professionController = TextEditingController();
   final TextEditingController _domicileController = TextEditingController();
+  List<Map<String, TextEditingController>> _participants = [
+    {
+      'name': TextEditingController(),
+      'id': TextEditingController(),
+      'birthDate': TextEditingController(),
+      'email': TextEditingController(),
+      'phone': TextEditingController(),
+    }
+  ];
+
+// Fonction pour ajouter un participant
+  void _addParticipant() {
+    setState(() {
+      _participants.add({
+        'name': TextEditingController(),
+        'id': TextEditingController(),
+        'birthDate': TextEditingController(),
+        'email': TextEditingController(),
+        'phone': TextEditingController(),
+      });
+    });
+  }
+
+// Fonction pour supprimer un participant
+  void _removeParticipant(int index) {
+    setState(() {
+      _participants.removeAt(index);
+    });
+  }
 
   String? _nom;
   String? _lieu;
@@ -37,7 +107,7 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
   String? _profession;
   String? _domicile;
   String? _birthday;
-
+  int index = 0;
   String? _choixPasseport;
   String? _sexe;
   TextEditingController _dateController = TextEditingController();
@@ -93,6 +163,12 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                 Text('avec une taille de  : $_taille m'),
                 Text('profession : $_profession'),
                 Text('habite à  : $_domicile'),
+                TextButton(
+                  onPressed: () {
+                    _openDocument();
+                  },
+                  child: Text('Ouvrir le document'),
+                ),
               ],
             ),
           ),
@@ -133,7 +209,7 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
             onStepContinue: () {
               if (_currentStep == 0) {
                 // Validation pour l'étape "Choix"
-                if ((_choixPasseport == null) || (_birthday == null)) {
+                if ((_choixPasseport == null)) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: Text(
@@ -200,30 +276,6 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                 content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      controller: _dateController,
-                      decoration: InputDecoration(
-                        labelText: 'Date de naissance',
-                        border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.calendar_today),
-                        hintText: "Entrez votre date de naissance",
-                      ),
-                      readOnly: true,
-                      onTap: () async {
-                        String? birthday = await _selectDate(context);
-                        if (birthday != null) {
-                          setState(() {
-                            _birthday = birthday;
-                          });
-                        }
-                      },
-                      validator: (_birthday) {
-                        if (_birthday == null || _birthday.isEmpty) {
-                          return "Veuillez entrer votre date de naissance";
-                        }
-                        return null;
-                      },
-                    ),
                     SizedBox(height: 30),
                     Text("Je sollicite: ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
@@ -270,122 +322,41 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _tailleController,
-                        decoration: InputDecoration(
-                          labelText: 'taille',
-                          border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _couleuryeuxController,
-                        decoration: InputDecoration(
-                          labelText: 'couleur yeux',
-                          border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _couleurcheveuxController,
-                        decoration: InputDecoration(
-                          labelText: 'couleur cheveux',
-                          border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 30),
                       TextFormField(
                         controller: _nomController,
                         decoration: InputDecoration(
                           labelText: 'nom',
                           border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
+                          hintText: "Entrer votre nom",
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
+                            return "Veuillez entrer votre  nom ";
                           }
                           return null;
                         },
                       ),
                       SizedBox(height: 30),
                       TextFormField(
-                        controller: _professionController,
+                        controller: _dateController,
                         decoration: InputDecoration(
-                          labelText: 'profession',
+                          labelText: 'Date de naissance',
                           border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
+                          suffixIcon: Icon(Icons.calendar_today),
+                          hintText: "Entrez votre date de naissance",
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
+                        readOnly: true,
+                        onTap: () async {
+                          String? birthday = await _selectDate(context);
+                          if (birthday != null) {
+                            setState(() {
+                              _birthday = birthday;
+                            });
                           }
-                          return null;
                         },
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _nationalityController,
-                        decoration: InputDecoration(
-                          labelText: 'nationalité',
-                          border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _nationalityorigineController,
-                        decoration: InputDecoration(
-                          labelText: 'origine',
-                          border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 30),
-                      TextFormField(
-                        controller: _domicileController,
-                        decoration: InputDecoration(
-                          labelText: 'domicile',
-                          border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
+                        validator: (_birthday) {
+                          if (_birthday == null || _birthday.isEmpty) {
+                            return "Veuillez entrer votre date de naissance";
                           }
                           return null;
                         },
@@ -394,18 +365,18 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                       TextFormField(
                         controller: _lieuController,
                         decoration: InputDecoration(
-                          labelText: 'lieu',
+                          labelText: 'lieu de naissance',
                           border: OutlineInputBorder(),
-                          hintText: "Entrer le nom de votre mère",
+                          hintText: "Entrer votre lieu de naissance",
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Veuillez entrer le nom de la mere";
+                            return "Veuillez entrer votre lieu de naissance";
                           }
                           return null;
                         },
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 30),
                       TextFormField(
                         controller: _pereController,
                         decoration: InputDecoration(
@@ -431,6 +402,111 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Veuillez entrer le nom de la mere";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        controller: _nationalityController,
+                        decoration: InputDecoration(
+                          labelText: 'nationalité',
+                          border: OutlineInputBorder(),
+                          hintText: "Entrer votre nationalité",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Veuillez entrer votre nationalité";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        controller: _nationalityorigineController,
+                        decoration: InputDecoration(
+                          labelText: 'pays d\'origine',
+                          border: OutlineInputBorder(),
+                          hintText: "Entrer votre pays d'origine",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Veuillez entrer votre pays d'origine";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        controller: _professionController,
+                        decoration: InputDecoration(
+                          labelText: 'profession',
+                          border: OutlineInputBorder(),
+                          hintText: "Entrer votre profession",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Veuillez entrer votre professione";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        controller: _tailleController,
+                        decoration: InputDecoration(
+                          labelText: 'taille',
+                          border: OutlineInputBorder(),
+                          hintText: "Entrer votre taille en mètre (ex: 1.82)",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Veuillez entrer votre taille (ex: 1.80) ";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        controller: _couleuryeuxController,
+                        decoration: InputDecoration(
+                          labelText: 'couleur yeux',
+                          border: OutlineInputBorder(),
+                          hintText: "Entrer la couleur de vos yeux",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Veuillez entrer la couleur de vos yeux";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        controller: _couleurcheveuxController,
+                        decoration: InputDecoration(
+                          labelText: 'couleur cheveux',
+                          border: OutlineInputBorder(),
+                          hintText: "Entrer la couleur de vos cheveux",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Veuillez entrer la couleur de vos cheveux";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 30),
+                      TextFormField(
+                        controller: _domicileController,
+                        decoration: InputDecoration(
+                          labelText: 'domicile',
+                          border: OutlineInputBorder(),
+                          hintText: "Entrer votre lieu de domicile",
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Veuillez entrer votre lieu de domicile";
                           }
                           return null;
                         },
@@ -484,6 +560,12 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                           return null;
                         },
                       ),
+                      SizedBox(height: 30),
+                      TextButton(
+                          onPressed: () {
+                            insertPdfDocument();
+                          },
+                          child: Text('Ajouter votre photo')),
                       SizedBox(height: 30),
                       Text("Sexe:",
                           style: TextStyle(fontWeight: FontWeight.bold)),
@@ -559,6 +641,72 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                           });
                         },
                       ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (int index = 0;
+                              index < _participants.length;
+                              index++) ...[
+                            if (index >= 0)
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("Je demande l'inscription sur ce \n passeport des enfants de nationalité \n Djiboutiennes, de moins de \n 15ans, ci-après mentionné(e)s",
+                                    style: TextStyle(fontSize: 15.0),),
+                                    SizedBox(width : 0,),
+                                    IconButton(
+                                      icon:
+                                          Icon(Icons.close, color: Colors.red),
+                                      onPressed: () =>
+                                          _removeParticipant(index),
+                                    ),
+                                    
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                            Text("Nom de l'enfant *"),
+                            TextFormField(
+                              controller: _participants[index]['name'],
+                              decoration: InputDecoration(
+                                hintText: "Nom de l'enfant ",
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            
+                            SizedBox(height: 10),
+                            Text("Date de naissance *"),
+                            TextFormField(
+                              controller: _participants[index]['birthDate'],
+                              decoration: InputDecoration(
+                                hintText: "Date de naissance",
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.calendar_today),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                                "Numéro d'acte de naissance *"),
+                            TextFormField(
+                              controller: _participants[index]['id'],
+                              decoration: InputDecoration(
+                                hintText: "Numéro d'acte",
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            
+                            
+                            
+                            SizedBox(height: 20),
+                          ],
+                          ElevatedButton(
+                            onPressed: _addParticipant,
+                            child: Text("Ajouter un enfant"),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -566,16 +714,37 @@ class _DemandeDePasseportState extends State<DemandeDePasseport> {
                 state:
                     _currentStep == 1 ? StepState.editing : StepState.complete,
               ),
+              
+
               Step(
                 title: Text("3"),
-                content: Column(
-                  children: [
-                    SizedBox(height: 20),
-                  ],
+                content: Container(
+                  decoration: BoxDecoration(color: Colors.grey.shade200,),
+                  child:Column(children: [
+                  Text("PROCEDER AU PAIMENT?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0,),),
+                  SizedBox(height: 30.0,),
+                  Row(
+                    children: [
+                      ElevatedButton(onPressed: (){}, child: Text("D-MONEY", style: TextStyle(fontStyle: FontStyle.italic))),
+                      ElevatedButton(onPressed: (){}, child: Text("WAAFI", style: TextStyle(fontStyle: FontStyle.italic))),
+                      ElevatedButton(onPressed: (){}, child: Text("CAC-PAY", style: TextStyle(fontStyle: FontStyle.italic))),
+                      ],
+                  ),
+                  Row(
+                    children: [
+                      
+                      ElevatedButton(onPressed: (){}, child: Text("SABA-PAY", style: TextStyle(fontStyle: FontStyle.italic))),
+                      ElevatedButton(onPressed: (){}, child: Text("BCI-PAY", style: TextStyle(fontStyle: FontStyle.italic))),
+                      ElevatedButton(onPressed: (){}, child: Text("VISA", style: TextStyle(fontStyle: FontStyle.italic), )),
+                    ],
+                  )
+                ]), 
                 ),
-                isActive: _currentStep >= 2,
+                
+                
+                isActive: _currentStep >= 3,
                 state:
-                    _currentStep == 2 ? StepState.editing : StepState.complete,
+                    _currentStep == 3 ? StepState.editing : StepState.complete,
               ),
             ],
           ),
